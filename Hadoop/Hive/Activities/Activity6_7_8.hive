@@ -1,0 +1,13 @@
+show databases;
+create database office;
+use office;
+CREATE TABLE employee3 (id INT, name STRING, dept STRING, yoj INT, salary INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' TBLPROPERTIES ("skip.header.line.count"="1");
+DESCRIBE employee3;
+LOAD DATA LOCAL INPATH '/root/EmpData.csv' INTO TABLE employee3;
+SELECT * FROM employee3;
+SELECT COUNT(*) FROM employee3;
+SELECT  id, name FROM employee3;
+SELECT * FROM employee3 WHERE salary > 30000;
+SELECT count(*) FROM employee3;
+INSERT OVERWRITE DIRECTORY '/user/root/mokshith/output/export3' ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' SELECT * FROM employee3;
+INSERT OVERWRITE LOCAL DIRECTORY '/export3' ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' SELECT * FROM employee3; 
