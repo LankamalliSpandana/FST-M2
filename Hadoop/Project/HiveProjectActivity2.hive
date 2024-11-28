@@ -1,0 +1,13 @@
+-- Drop Table
+DROP TABLE LUKE_Counter;
+
+-- Creating Table
+CREATE TABLE LUKE_Counter (name STRING, line STRING)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' TBLPROPERTIES ("skip.header.line.count"="2");
+
+-- Loading data into the table
+LOAD DATA LOCAL INPATH 'root/Inputs/episodeIV_dialogues.txt' INTO TABLE LUKE_Counter;
+
+-- Generate output and export it
+INSERT OVERWRITE DIRECTORY 'hdfs:///user/Hive_project/Hive_Project_Output2' ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT COUNT(*) FROM LUKE_Counter where INSTR(line, 'Luke')>0;

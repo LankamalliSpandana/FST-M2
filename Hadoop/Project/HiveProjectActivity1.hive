@@ -1,0 +1,19 @@
+-- Drop the Tables
+DROP TABLE LineSpoken;
+DROP TABLE LineSpoken_Count;
+
+-- Create a table to store results
+CREATE TABLE LineSpoken (Name STRING, Dialogues STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t';
+
+-- Load data into the database using a file on your local system (NOT HDFS)
+LOAD DATA LOCAL INPATH '/root/Inputs/episodeIV_dialogues.txt' INTO TABLE LineSpoken;
+LOAD DATA LOCAL INPATH '/root/Inputs/episodeVI_dialogues.txt' INTO TABLE LineSpoken;
+LOAD DATA LOCAL INPATH '/root/Inputs/episodeV_dialogues.txt' INTO TABLE LineSpoken;
+
+-- Create a new table using data from the files table
+
+CREATE TABLE LineSpoken_Count AS SELECT Name,No_Of_Dialogues FROM(SELECT Name,COUNT(1) as No_Of_Dialogues FROM LineSpoken GROUP BY Name)w ORDER by No_Of_Dialogues DESC;
+
+-- Display results
+
+INSERT OVERWRITE DIRECTORY 'hdfs:///user/Hive_project/Hive_Project_Output' ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' SELECT * FROM LineSpoken_Count;
